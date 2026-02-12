@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Banco de Solidaridad</title>
+  <meta name="description" content="Banco de Solidaridad" />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --muted:#8ea0c2;
+      --text:#e8efff;
+      --brand:#4cc3ff;
+      --brand2:#7c5cff;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --max: 1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(124,92,255,.25), transparent 55%),
+                  radial-gradient(900px 500px at 85% 15%, rgba(76,195,255,.22), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+    .container{ width:min(var(--max), calc(100% - 2rem)); margin-inline:auto; }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.65);
+      border-bottom:1px solid var(--border);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:.9rem 0;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:.75rem;
+      min-width: 210px;
+    }
+
+    .logo{
+      width:40px; height:40px;
+      border-radius:12px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: var(--shadow);
+      flex: 0 0 auto;
+    }
+
+    .brand strong{ display:block; font-size:1.05rem; letter-spacing:.2px; }
+    .brand span{ display:block; font-size:.85rem; color:var(--muted); margin-top:1px; }
+
+    .menu{
+      display:flex;
+      align-items:center;
+      gap:.85rem;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .menu a{
+      font-size:.92rem;
+      color: rgba(232,239,255,.9);
+      padding:.45rem .65rem;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .menu a:hover{
+      border-color: var(--border);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+    }
+
+    .cta{
+      display:flex;
+      gap:.6rem;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+      padding:.62rem .9rem;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-weight:600;
+      font-size:.92rem;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn:hover{ background: rgba(255,255,255,.07); }
+    .btn.primary{
+      border-color: rgba(76,195,255,.35);
+      background: linear-gradient(135deg, rgba(76,195,255,.25), rgba(124,92,255,.18));
+    }
+
+    /* Hero */
+    .hero{ padding: 3.2rem 0 1.4rem; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.3fr .9fr;
+      gap:1.2rem;
+      align-items:stretch;
+    }
+    .hero h1{
+      margin:0 0 .6rem;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height:1.15;
+      letter-spacing:-.5px;
+    }
+    .hero p{
+      margin:0 0 1.2rem;
+      color: rgba(232,239,255,.86);
+      max-width: 60ch;
+    }
+    .hero-card{
+      background: rgba(17,26,46,.70);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem;
+      box-shadow: var(--shadow);
+    }
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.7rem;
+      align-items:center;
+      margin-top:.2rem;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:.75rem;
+    }
+    .kpi{
+      padding:.85rem;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+    .kpi strong{ display:block; font-size:1.1rem; }
+    .kpi span{ display:block; color: var(--muted); font-size:.88rem; margin-top:.25rem; }
+
+    /* Sections */
+    main{ padding: 1.4rem 0 3.4rem; }
+    section{ scroll-margin-top: 90px; }
+    .section{
+      margin-top: 1.2rem;
+      background: rgba(17,26,46,.70);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .section h2{
+      margin:0 0 .75rem;
+      font-size:1.25rem;
+      letter-spacing:-.2px;
+    }
+    .section p{ margin:.55rem 0; color: rgba(232,239,255,.86); }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .85rem;
+      margin-top:.8rem;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      padding: .95rem;
+    }
+    .card h3{
+      margin:0 0 .4rem;
+      font-size: 1rem;
+    }
+    .card p{
+      margin:0;
+      color: rgba(232,239,255,.82);
+      font-size:.95rem;
+    }
+
+    /* Collabora */
+    .highlight{
+      border:1px dashed rgba(76,195,255,.45);
+      background: linear-gradient(135deg, rgba(76,195,255,.10), rgba(124,92,255,.08));
+      padding: 1rem;
+      border-radius: 14px;
+      margin-top:.9rem;
+    }
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.8rem;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .badge{
+      display:inline-flex;
+      gap:.45rem;
+      align-items:center;
+      font-size:.9rem;
+      padding:.35rem .6rem;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: rgba(232,239,255,.9);
+    }
+    code.inline{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .92em;
+      padding: .15rem .4rem;
+      border-radius: 8px;
+      background: rgba(0,0,0,.25);
+      border: 1px solid var(--border);
+    }
+
+    /* News list */
+    .news{
+      display:grid;
+      gap:.75rem;
+      margin-top:.6rem;
+    }
+    .news article{
+      border:1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      padding: .95rem;
+    }
+    .news time{ color: var(--muted); font-size:.9rem; }
+    .news h3{ margin:.35rem 0 .35rem; font-size:1.02rem; }
+    .news p{ margin:0; color: rgba(232,239,255,.82); }
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--border);
+      padding: 1.2rem 0;
+      color: rgba(232,239,255,.75);
+      background: rgba(11,18,32,.55);
+    }
+    .footer-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .kpis{ grid-template-columns: 1fr 1fr 1fr; }
+      .cards{ grid-template-columns: 1fr; }
+      .grid-2{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+    @media (max-width: 560px){
+      .menu{ display:none; }
+      .kpis{ grid-template-columns: 1fr; }
+      .btn{ width:100%; }
+      .cta{ width:100%; flex-direction:column; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="nav" aria-label="Navegación principal">
+        <a class="brand" href="#inicio">
+          <span class="logo" aria-hidden="true"></span>
+          <span>
+            <strong>Banco de Solidaridad</strong>
+            <span>Una red de apoyo con impacto local</span>
+          </span>
+        </a>
+
+        <nav class="menu" aria-label="Secciones">
+          <a href="#quienes-somos">¿Quiénes somos?</a>
+          <a href="#que-hacemos">¿Qué hacemos?</a>
+          <a href="#historia">Historia</a>
+          <a href="#colabora">Colabora</a>
+          <a href="#noticias">Noticias</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+
+        <div class="cta">
+          <a class="btn primary" href="#colabora">Colaborar</a>
+          <a class="btn" href="#contacto">Contactar</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="inicio" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h1>Banco de Solidaridad</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#colabora">Quiero colaborar</a>
+            <a class="btn" href="#que-hacemos">Ver qué hacemos</a>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Resumen">
+          <div class="kpis">
+            <div class="kpi">
+              <strong>+123</strong>
+              <span>Lorem ipsum</span>
+            </div>
+            <div class="kpi">
+              <strong>+45</strong>
+              <span>Dolor sit</span>
+            </div>
+            <div class="kpi">
+              <strong>+6</strong>
+              <span>Amet elit</span>
+            </div>
+          </div>
+          <p style="margin-top:1rem;color:rgba(232,239,255,.82);">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- ¿Qué hacemos? (primero por UX) -->
+    <section id="que-hacemos" class="section">
+      <h2>¿Qué hacemos?</h2>
+      <div class="grid-2">
+        <div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit tempus porttitor. Donec sed odio dui.</p>
+        </div>
+        <div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+      </div>
+
+      <div class="cards" role="list" aria-label="Líneas de acción">
+        <div class="card" role="listitem">
+          <h3>Apoyo directo</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mattis consectetur purus sit amet fermentum.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Recogida y distribución</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Programas comunitarios</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quienes-somos" class="section">
+      <h2>¿Quiénes somos?</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+
+      <div class="cards" role="list" aria-label="Valores">
+        <div class="card" role="listitem">
+          <h3>Transparencia</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Impacto</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Cercanía</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere consectetur est at lobortis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="historia" class="section">
+      <h2>Historia</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere consectetur est at lobortis. Donec id elit non mi porta gravida at eget metus.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Donec ullamcorper nulla non metus auctor fringilla.</p>
+    </section>
+
+    <section id="colabora" class="section">
+      <h2>Colabora</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+
+      <div class="highlight">
+        <div class="row">
+          <div>
+            <div class="badge">Nº de cuenta</div>
+            <p style="margin:.55rem 0 0;color:rgba(232,239,255,.86);">
+              Lorem ipsum: <code class="inline">ES00 0000 0000 0000 0000 0000</code>
+            </p>
+          </div>
+          <a class="btn primary" href="#contacto" aria-label="Ir a contacto para colaborar">Quiero aportar</a>
+        </div>
+      </div>
+
+      <div class="cards" role="list" aria-label="Formas de participar">
+        <div class="card" role="listitem">
+          <h3>Participa como voluntario</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed odio dui. Nulla vitae elit libero.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Participa como empresa</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas faucibus mollis interdum. Nullam quis risus eget urna.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Otras formas de ayudar</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mattis consectetur purus sit amet fermentum.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="noticias" class="section">
+      <h2>Noticias</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+
+      <div class="news" aria-label="Listado de noticias">
+        <article>
+          <time datetime="2026-02-01">1 de febrero de 2026</time>
+          <h3>Lorem ipsum dolor sit amet</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+        </article>
+        <article>
+          <time datetime="2026-01-15">15 de enero de 2026</time>
+          <h3>Consectetur adipiscing elit</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+        </article>
+        <article>
+          <time datetime="2025-12-20">20 de diciembre de 2025</time>
+          <h3>Sed posuere consectetur est</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contacto" class="section">
+      <h2>Contacto</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Si quieres colaborar, hacer una consulta o proponer una iniciativa, escríbenos.</p>
+
+      <div class="highlight">
+        <div class="row">
+          <div>
+            <div class="badge">Email</div>
+            <p style="margin:.55rem 0 0;">
+              <a href="mailto:bancodesolidaridad.esp@gmail.com">bancodesolidaridad.esp@gmail.com</a>
+            </p>
+          </div>
+          <a class="btn" href="mailto:bancodesolidaridad.esp@gmail.com">Enviar correo</a>
+        </div>
+      </div>
+
+      <div class="cards" role="list" aria-label="Info adicional">
+        <div class="card" role="listitem">
+          <h3>Horario</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Ubicación</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit tempus porttitor.</p>
+        </div>
+        <div class="card" role="listitem">
+          <h3>Redes</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras justo odio, dapibus ac facilisis in.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <strong>Banco de Solidaridad</strong><br />
+          <span style="color:rgba(232,239,255,.7);">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+        </div>
+        <div>
+          <a href="#inicio">Volver arriba</a>
+          <span style="opacity:.5;"> · </span>
+          <a href="#colabora">Colabora</a>
+          <span style="opacity:.5;"> · </span>
+          <a href="#contacto">Contacto</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
