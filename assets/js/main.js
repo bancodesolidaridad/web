@@ -58,3 +58,46 @@
   window.addEventListener("resize", updateScrollTopButton);
   updateScrollTopButton();
 })();
+
+(function () {
+  var counters = document.querySelectorAll(".kpi strong");
+  if (!counters.length) return;
+
+  var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var numberFormat = new Intl.NumberFormat("es-ES");
+
+  counters.forEach(function (counter, index) {
+    var originalText = (counter.textContent || "").trim();
+    var prefix = originalText.startsWith("+") ? "+" : "";
+    var target = Number(originalText.replace(/[^\d]/g, ""));
+
+    if (!Number.isFinite(target) || target <= 0) return;
+
+    if (prefersReducedMotion) {
+      counter.textContent = prefix + numberFormat.format(target);
+      return;
+    }
+
+    var duration = 1000 + index * 180;
+    var startTime;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var elapsed = timestamp - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(target * eased);
+
+      counter.textContent = prefix + numberFormat.format(current);
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        counter.textContent = prefix + numberFormat.format(target);
+      }
+    }
+
+    counter.textContent = prefix + "0";
+    window.requestAnimationFrame(step);
+  });
+})();
