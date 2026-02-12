@@ -236,7 +236,6 @@
       pointer-events:none;
     }
     .hero .container {
-      width: auto;
       padding: 1rem;
     }
     .hero-grid{
@@ -314,9 +313,16 @@
     .kpi{
       padding:.85rem;
       border-radius: 16px;
-      border:1px solid rgba(var(--primary-rgb), .12);
       background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,241,244,.85));
       box-shadow: 0 6px 18px rgba(17,24,39,.05);
+    }
+    .kpi>div {
+      display: flex;
+      gap: .5rem;
+    }
+    .kpi img {
+      height: 25px;
+      object-fit: contain;
     }
     .kpi strong{
       display:block;
