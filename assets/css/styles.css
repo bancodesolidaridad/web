@@ -331,6 +331,7 @@
       color: rgba(var(--primary-rgb), .95);
       letter-spacing:-.2px;
     }
+
     .kpi span{
       display:block;
       color: rgba(31,41,55,.65);
