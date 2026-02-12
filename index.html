@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Banco de Solidaridad</title>
   <meta name="description" content="Banco de Solidaridad" />
+
   <style>
     :root{
       /* Marca */
@@ -215,6 +216,10 @@
     .btn.primary:hover{
       background: linear-gradient(135deg, rgba(237,49,87,1), rgba(255,170,187,1));
       border-color: rgba(237,49,87,.45);
+    }
+
+    .btn svg {
+      color: white;
     }
 
     /* Hero */
@@ -447,6 +452,35 @@
       gap:1rem;
       align-items:center;
       justify-content:space-between;
+    }
+
+    .scroll-top{
+      position:fixed;
+      right:1rem;
+      bottom:1rem;
+      z-index:45;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:52px;
+      height:52px;
+      padding:0 .9rem;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(237,49,87,.18);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease, visibility .2s ease, bottom .15s ease;
+    }
+
+    .scroll-top.is-visible{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transform: translateY(0);
     }
 
     /* Responsive */
@@ -732,6 +766,10 @@
     </div>
   </footer>
 
+  <button id="scroll-top" class="btn scroll-top" type="button" aria-label="Subir arriba" title="Subir arriba">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M297.4 169.4C309.9 156.9 330.2 156.9 342.7 169.4L534.7 361.4C547.2 373.9 547.2 394.2 534.7 406.7C522.2 419.2 501.9 419.2 489.4 406.7L320 237.3L150.6 406.6C138.1 419.1 117.8 419.1 105.3 406.6C92.8 394.1 92.8 373.8 105.3 361.3L297.3 169.3z"/></svg>
+  </button>
+
   <script>
     (function () {
       var toggle = document.querySelector(".menu-toggle");
@@ -765,6 +803,33 @@
       window.addEventListener("resize", function () {
         if (window.innerWidth > 560) closeMenu();
       });
+    })();
+
+    (function () {
+      var button = document.getElementById("scroll-top");
+      var footer = document.querySelector("footer");
+      if (!button || !footer) return;
+
+      function updateScrollTopButton() {
+        var doc = document.documentElement;
+        var scrollBottom = window.scrollY + window.innerHeight;
+        var isAtEnd = scrollBottom >= doc.scrollHeight - 4;
+        var footerRect = footer.getBoundingClientRect();
+        var overlap = window.innerHeight - footerRect.top;
+        var baseBottom = 16;
+
+        button.classList.toggle("is-visible", isAtEnd);
+        button.style.bottom = (overlap > 0 ? baseBottom + overlap : baseBottom) + "px";
+      }
+
+      button.addEventListener("click", function () {
+        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+      });
+
+      window.addEventListener("scroll", updateScrollTopButton, { passive: true });
+      window.addEventListener("resize", updateScrollTopButton);
+      updateScrollTopButton();
     })();
   </script>
 </body>
