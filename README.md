@@ -1,4 +1,5 @@
 # Banco de Solidaridad
+Web de El Banco de Solidaridad (BdS).
 
 ## index.html
 Contenido de la web:
@@ -11,7 +12,7 @@ Contiene la información.
 
 ###### header
 Logo y enlaces del menú.
-- Se adapta a las pantallas, mostrandose en una *"hamnburguesa"* en dispositivos móviles.
+- Se adapta a las pantallas, mostrandose en una *"hamburguesa"* en dispositivos móviles.
 
 ###### hero
 Información inicial de presentación.
