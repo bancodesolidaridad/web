@@ -51,6 +51,10 @@
       background-color: var(--bg);
     }
 
+    body.menu-open {
+      overflow: hidden;
+    }
+
     /* General */
     a {
       color: inherit;

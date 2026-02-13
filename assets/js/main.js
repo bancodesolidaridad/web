@@ -132,6 +132,7 @@
     toggle.setAttribute("aria-expanded", "false");
     toggle.setAttribute("aria-label", "Abrir menú de navegación");
     menu.classList.remove("is-open");
+    document.body.classList.remove("menu-open");
   }
 
   toggle.addEventListener("click", function () {
@@ -141,8 +142,10 @@
       "aria-label",
       isOpen ? "Abrir menú de navegación" : "Cerrar menú de navegación"
     );
-    menu.classList.toggle("is-open", !isOpen);
-    if (!isOpen && header) {
+    var nextIsOpen = !isOpen;
+    menu.classList.toggle("is-open", nextIsOpen);
+    document.body.classList.toggle("menu-open", nextIsOpen);
+    if (nextIsOpen && header) {
       header.classList.remove("is-hidden");
     }
   });
