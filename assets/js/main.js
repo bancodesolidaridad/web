@@ -67,7 +67,6 @@
 
   if (visualViewport) {
     visualViewport.addEventListener("resize", updateViewportBottomOffset);
-    visualViewport.addEventListener("scroll", updateViewportBottomOffset);
   }
 
   syncViewportVars();

@@ -742,7 +742,7 @@
         height: calc(100svh - var(--header-offset, 110px));
         height: calc(100dvh - var(--header-offset, 110px));
         padding: .5rem;
-        padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0px) + var(--viewport-bottom-offset, 0px));
+        padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0px));
         border-radius: 0;
         border: 1px solid var(--border);
         background: rgba(255, 255, 255, 1);
