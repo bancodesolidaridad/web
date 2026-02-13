@@ -57,10 +57,16 @@
       width: 100% !important;
     }
 
+    .centered-flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: 2rem;
     }
 
     .container,
@@ -417,7 +423,6 @@
       padding: 1.2rem 0 3.2rem;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
       background-image:
         radial-gradient(circle at top left,
         rgba(var(--primary-rgb), .10) 0px,
@@ -437,8 +442,10 @@
     }
 
     section {
+      min-height: calc(100vh - 100px - 4rem); /* pantalla - header - padding */
       scroll-margin-top: 92px;
       padding: 2rem 0;
+      padding-top: 5rem;
     }
     .section--sm {
       min-height: auto;
@@ -455,10 +462,12 @@
 
     .cards {
       display: flex;
+      flex-direction: column;
       flex-wrap: wrap;
       justify-content: center;
       gap: .85rem;
       margin-top: .85rem;
+      text-align: left;
     }
 
     .card {
@@ -498,6 +507,7 @@
       margin-top: .95rem;
       box-shadow: 0 10px 22px rgba(var(--primary-rgb), .08);
       color: white;
+      text-align: left;
     }
 
     .row {
@@ -537,6 +547,7 @@
       background-color: var(--primary);
       padding: 2rem 1rem;
       color: white;
+      text-align: center;
     }
     section#colabora p {
       color: white;
@@ -757,6 +768,7 @@
     @media (max-width: 768px) {
       .grid-2 {
         grid-template-columns: 1fr;
+        gap: 1rem;
       }
       .grid-2 img {
         justify-self: center;
@@ -784,12 +796,36 @@
         );
       }
 
+      section {
+        min-height: auto;
+        padding: 2rem 0;
+      }
+      section .cards {
+        order: 1;
+      }
+
       .cards {
+        margin: 0;
         flex-direction: column;
       }
 
+      .highlight {
+        width: 100%;
+      }
+      .row {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .row>div {
+        width: 100%;
+      }
+
       code.inline {
-        font-size: 1em;
+        display: flex;
+        width: 100%;
+        font-size: 1.2em;
+        justify-content: center;
       }
 
       .footer-grid {
