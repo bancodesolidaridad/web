@@ -32,22 +32,24 @@
 (function () {
   var header = document.querySelector("header");
   if (!header) return;
+  var root = document.documentElement;
+  var visualViewport = window.visualViewport;
 
   function updateHeaderOffset() {
-    document.documentElement.style.setProperty("--header-offset", header.offsetHeight + "px");
+    root.style.setProperty("--header-offset", header.offsetHeight + "px");
   }
 
   function updateViewportBottomOffset() {
     var viewportBottomOffset = 0;
 
-    if (window.visualViewport) {
+    if (visualViewport) {
       viewportBottomOffset = Math.max(
         0,
-        Math.round(window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop)
+        Math.round(window.innerHeight - visualViewport.height - visualViewport.offsetTop)
       );
     }
 
-    document.documentElement.style.setProperty("--viewport-bottom-offset", viewportBottomOffset + "px");
+    root.style.setProperty("--viewport-bottom-offset", viewportBottomOffset + "px");
   }
 
   function syncViewportVars() {
@@ -63,9 +65,9 @@
     resizeObserver.observe(header);
   }
 
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", updateViewportBottomOffset);
-    window.visualViewport.addEventListener("scroll", updateViewportBottomOffset);
+  if (visualViewport) {
+    visualViewport.addEventListener("resize", updateViewportBottomOffset);
+    visualViewport.addEventListener("scroll", updateViewportBottomOffset);
   }
 
   syncViewportVars();
@@ -124,6 +126,7 @@
 (function () {
   var toggle = document.querySelector(".menu-toggle");
   var menu = document.getElementById("menu-principal");
+  var header = document.querySelector("header");
   if (!toggle || !menu) return;
 
   function closeMenu() {
@@ -140,8 +143,8 @@
       isOpen ? "Abrir menú de navegación" : "Cerrar menú de navegación"
     );
     menu.classList.toggle("is-open", !isOpen);
-    if (!isOpen) {
-      document.querySelector("header").classList.remove("is-hidden");
+    if (!isOpen && header) {
+      header.classList.remove("is-hidden");
     }
   });
 

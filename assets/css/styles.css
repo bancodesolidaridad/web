@@ -738,12 +738,9 @@
         right: 0;
         bottom: 0;
         left: 0;
-        width: auto;
         height: calc(100vh - var(--header-offset, 110px));
         height: calc(100svh - var(--header-offset, 110px));
         height: calc(100dvh - var(--header-offset, 110px));
-        order: 4;
-        margin-top: 0;
         padding: .5rem;
         padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0px) + var(--viewport-bottom-offset, 0px));
         border-radius: 0;
