@@ -733,11 +733,11 @@
 
       .menu {
         display: none;
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: 110px;
         left: 0;
         height: calc(100vh - 110px); /* pantalla - header */
-        width: 100%;
+        width: 100vw;
         order: 4;
         margin-top: 0;
         padding: .5rem;
