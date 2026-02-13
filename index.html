@@ -26,6 +26,7 @@
   <header>
     <div class="container">
       <div class="nav" aria-label="Navegación principal">
+        <!-- Logo -->
         <a class="brand" href="#inicio">
           <img class="logo" src="assets/img/LOGO_BDS.svg" alt="Logo Banco de Solidaridad" />
           <span>
@@ -33,6 +34,7 @@
           </span>
         </a>
 
+        <!-- Botón menu (mobile) -->
         <button
           class="menu-toggle"
           type="button"
@@ -42,27 +44,26 @@
           <span class="bar" aria-hidden="true"></span>
         </button>
 
+        <!-- Menu -->
         <nav id="menu-principal" class="menu" aria-label="Secciones">
           <a href="#quienes-somos">¿Quiénes somos?</a>
           <a href="#que-hacemos">¿Qué hacemos?</a>
           <a href="#historia">Historia</a>
+
           <div class="menu-btns">
-            <a class="btn primary menu-cta-link" href="#colabora">Colaborar</a>
-            <a class="btn menu-cta-link" href="#contacto">Contactar</a>
+            <a class="btn primary" href="#colabora">Colaborar</a>
+            <a class="btn" href="#contacto">Contactar</a>
           </div>
         </nav>
-
-        <div class="cta">
-          <a class="btn primary" href="#colabora">Colaborar</a>
-          <a class="btn" href="#contacto">Contactar</a>
-        </div>
       </div>
     </div>
   </header>
 
+  <!-- Inicio -->
   <div id="inicio" class="hero">
     <div class="container">
       <div class="hero-grid">
+        <!-- Nombre -->
         <div class="hero-title">
           <h1>Banco de Solidaridad</h1>
           <p>
@@ -70,8 +71,10 @@
           </p>
         </div>
 
+        <!-- KPIS -->
         <aside class="hero-card" aria-label="Resumen">
           <div class="kpis">
+            <!-- Familia -->
             <div class="kpi">
               <div>
                 <img src="assets/img/family.png" alt="Icono familia" />
@@ -79,6 +82,7 @@
               </div>
               <span>Familias</span>
             </div>
+            <!-- Voluntarios -->
             <div class="kpi">
               <div>
                 <img src="assets/img/voluntarios.png" alt="Icono voluntarios" />
@@ -86,6 +90,7 @@
               </div>
               <span>Voluntarios</span>
             </div>
+            <!-- KG -->
             <div class="kpi">
               <div>
                 <img src="assets/img/alimentos.png" alt="Icono alimentos" />
@@ -94,6 +99,7 @@
               <span>KG repartidos</span>
             </div>
           </div>
+
           <div class="hero-actions">
             <a class="btn primary" href="#colabora">Colaborar</a>
           </div>
@@ -103,7 +109,7 @@
   </div>
 
   <main class="container">
-    <!-- ¿Qué hacemos? (primero por UX) -->
+    <!-- ¿Qué hacemos? -->
     <section id="que-hacemos" class="section">
       <h1>¿Qué hacemos?</h1>
       <p>Banco de
@@ -142,6 +148,7 @@
       </div>
     </section>
 
+    <!-- ¿Quienes somos? -->
     <section id="quienes-somos" class="section">
       <h1>¿Quiénes somos?</h1>
       <p>Banco de Solidaridad es miembro de la Federación de
@@ -177,6 +184,7 @@
       </div>
     </section>
 
+    <!-- Historia -->
     <section id="historia" class="section">
       <h1>Historia</h1>
       <div class="grid-2">
@@ -185,11 +193,13 @@
       </div>
     </section>
 
+    <!-- Colabora -->
     <section id="colabora">
       <div class="section section--sm">
         <h1>Colabora con nosotros</h1>
         <p>El Banco de Solidaridad implica un encuentro, no se trata de un discurso para combatir la pobreza. Nos movemos por la necesidad que nos ha expresado la persona que tenemos delante, y siguiendo la provocación concreta que nos supone la situación que vive, intentamos responder compartiendo gratuitamente la vida. Es un abrazo.</p>
 
+        <!-- CC -->
         <div class="highlight">
           <div class="row">
             <div>
@@ -202,6 +212,7 @@
           </div>
         </div>
 
+        <!-- Formas de participar -->
         <div class="cards" role="list" aria-label="Formas de participar">
           <div class="card" role="listitem">
             <h3>Aporta alimentos</h3>
@@ -223,6 +234,7 @@
       </div>
     </section>
 
+    <!-- Noticias (ocultas) -->
     <section id="noticias" class="section" style="display: none;">
       <h1>Noticias</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
@@ -246,11 +258,13 @@
       </div>
     </section>
 
+    <!-- Contacto -->
     <section id="contacto">
       <div class="section section--sm">
         <h1>Contacto</h1>
         <p>Si quieres colaborar, hacer una consulta, escríbenos:</p>
 
+        <!-- email -->
         <div class="highlight">
           <div class="row">
             <div>
@@ -310,6 +324,7 @@
     </svg>
   </button>
 
+  <!-- IMPORTANTE: no eliminar -->
   <script src="assets/js/main.js"></script>
 </body>
 

@@ -1,3 +1,6 @@
+/**
+ * Menu toggle.
+ */
 (function () {
   var toggle = document.querySelector(".menu-toggle");
   var menu = document.getElementById("menu-principal");
@@ -32,6 +35,9 @@
   });
 })();
 
+/**
+ * Shows the scroll-top button when the footer is shown.
+ */
 (function () {
   var button = document.getElementById("scroll-top");
   var footer = document.querySelector("footer");
@@ -59,6 +65,9 @@
   updateScrollTopButton();
 })();
 
+/**
+ * Animate the kpi numbers.
+ */
 (function () {
   var counters = document.querySelectorAll(".kpi strong");
   if (!counters.length) return;
