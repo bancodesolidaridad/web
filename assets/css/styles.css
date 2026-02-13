@@ -653,3 +653,16 @@
         display: none;
       }
     }
+    @media (max-width: 600px){
+      .hero .container {
+        width: 100%;
+      }
+      .kpi {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .kpi>div {
+        flex-direction: column;
+      }
+    }
