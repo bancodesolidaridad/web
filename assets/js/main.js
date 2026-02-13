@@ -37,15 +37,38 @@
     document.documentElement.style.setProperty("--header-offset", header.offsetHeight + "px");
   }
 
-  window.addEventListener("resize", updateHeaderOffset);
-  window.addEventListener("load", updateHeaderOffset);
+  function updateViewportBottomOffset() {
+    var viewportBottomOffset = 0;
+
+    if (window.visualViewport) {
+      viewportBottomOffset = Math.max(
+        0,
+        Math.round(window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop)
+      );
+    }
+
+    document.documentElement.style.setProperty("--viewport-bottom-offset", viewportBottomOffset + "px");
+  }
+
+  function syncViewportVars() {
+    updateHeaderOffset();
+    updateViewportBottomOffset();
+  }
+
+  window.addEventListener("resize", syncViewportVars);
+  window.addEventListener("load", syncViewportVars);
 
   if (typeof ResizeObserver === "function") {
     var resizeObserver = new ResizeObserver(updateHeaderOffset);
     resizeObserver.observe(header);
   }
 
-  updateHeaderOffset();
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", updateViewportBottomOffset);
+    window.visualViewport.addEventListener("scroll", updateViewportBottomOffset);
+  }
+
+  syncViewportVars();
 })();
 
 /**

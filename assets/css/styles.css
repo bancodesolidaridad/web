@@ -745,7 +745,7 @@
         order: 4;
         margin-top: 0;
         padding: .5rem;
-        padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0px) + var(--viewport-bottom-offset, 0px));
         border-radius: 0;
         border: 1px solid var(--border);
         background: rgba(255, 255, 255, 1);
@@ -777,7 +777,7 @@
         margin-left: 0;
         margin-top: 1rem;
         justify-content: flex-end;
-        padding-bottom: 1rem;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px) + var(--viewport-bottom-offset, 0px));
       }
       
       .cta {
