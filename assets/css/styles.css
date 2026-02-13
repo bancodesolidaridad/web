@@ -736,16 +736,18 @@
         position: absolute;
         top: 100%;
         left: 0;
+        height: calc(100vh - 100px); /* pantalla - header */
         width: 100%;
         order: 4;
         margin-top: 0;
         padding: .5rem;
-        border-radius: 0 0 14px 14px;
+        border-radius: 0 0;
         border: 1px solid var(--border);
         background: rgba(255, 255, 255, 1);
         box-shadow: var(--shadow2);
         flex-direction: column;
         align-items: stretch;
+        justify-content: flex-start;
       }
       .menu.is-open {
         display: flex;
@@ -761,9 +763,11 @@
         display: inline-flex;
       }
       .menu .menu-btns {
+        flex-grow: 1;
         flex-direction: column;
         margin-left: 0;
         margin-top: 1rem;
+        justify-content: flex-end;
       }
       
       .cta {
