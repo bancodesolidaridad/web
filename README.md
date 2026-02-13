@@ -3,27 +3,33 @@
 ## index.html
 Contenido de la web:
 
-### head
+##### head
 Contiene el título, metatags (seo), carga los estilos y el favicon (imagen mostrada en la barra de navegación).
 
-### body
+##### body
 Contiene la información.
 
-#### header
+###### header
 Logo y enlaces del menú.
 - Se adapta a las pantallas, mostrandose en una *"hamnburguesa"* en dispositivos móviles.
 
-#### hero
+###### hero
 Información inicial de presentación.
 
-#### main
+###### main
 Secciones de la web, divididas por `<section>...</section>`.
 
-#### footer
+###### footer
 Información final con el logo y enlaces de nuevo.
 
 ## assets
 Contiene las imágenes, estilos css y código javascript.
+
+##### configuration.js
+Archivo de configuración donde cambiar los datos generales del Banco de Solidaridad.
+
+##### main.js
+Funciones generales útiles (no tocar).
 
 ### css
 Estilos y colores de la web.

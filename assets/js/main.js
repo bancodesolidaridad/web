@@ -1,4 +1,63 @@
 /**
+ * Render data from app configuration.
+ */
+(function () {
+  var config = window.APP_CONFIG || {};
+
+  var CC = typeof config.CC === "string" ? config.CC.trim() : "";
+  if (CC) {
+    document.querySelectorAll("[data-app-bank-account]").forEach(function (node) {
+      node.textContent = CC;
+    });
+  }
+  var email = typeof config.email === "string" ? config.email.trim() : "";
+  if (email) {
+    document.querySelectorAll("[data-app-email]").forEach(function (node) {
+      node.textContent = email;
+      node.setAttribute("href", "mailto:" + email);
+    });
+  }
+  var rrss = config.rrss && typeof config.rrss === "object" ? config.rrss : {};
+  document.querySelectorAll("[data-app-rrss]").forEach(function (node) {
+    var key = node.getAttribute("data-app-rrss");
+    var href = typeof rrss[key] === "string" ? rrss[key].trim() : "";
+    if (!href) return;
+    node.setAttribute("href", href);
+  });
+})();
+
+/**
+ * Render KPIs from app configuration.
+ */
+(function () {
+  var kpisContainer = document.getElementById("kpis");
+  if (!kpisContainer) return;
+
+  var config = window.APP_CONFIG || {};
+  var kpis = Array.isArray(config.kpis) ? config.kpis : [];
+  if (!kpis.length) return;
+
+  var html = kpis.map(function (kpi) {
+    var icon = typeof kpi.icon === "string" ? kpi.icon : "";
+    var iconAlt = typeof kpi.iconAlt === "string" ? kpi.iconAlt : "";
+    var value = typeof kpi.value === "string" ? kpi.value : "";
+    var label = typeof kpi.label === "string" ? kpi.label : "";
+
+    return [
+      '<div class="kpi">',
+      "  <div>",
+      '    <img src="' + icon + '" alt="' + iconAlt + '" />',
+      "    <strong>" + value + "</strong>",
+      "  </div>",
+      "  <span>" + label + "</span>",
+      "</div>"
+    ].join("\n");
+  }).join("\n");
+
+  kpisContainer.innerHTML = html;
+})();
+
+/**
  * Menu toggle.
  */
 (function () {
