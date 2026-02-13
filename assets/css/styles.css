@@ -6,7 +6,7 @@
       --secondary-rgb: 238, 209, 32;
 
       /* General */
-      --bg: #f6f6f6;
+      --bg: #fcfcfc;
       --text: #1f2937;
       --muted: #6b7280;
 
@@ -465,7 +465,7 @@
       flex: 1;
       border: 1px solid rgba(17, 24, 39, .10);
       border-radius: 16px;
-      background: rgba(255, 255, 255, .9);
+      background: rgba(255, 255, 255, 1);
       padding: 1rem;
       box-shadow: 0 6px 18px rgba(17, 24, 39, .05);
       transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
@@ -757,6 +757,9 @@
     @media (max-width: 768px) {
       .grid-2 {
         grid-template-columns: 1fr;
+      }
+      .grid-2 img {
+        justify-self: center;
       }
 
       .brand {
