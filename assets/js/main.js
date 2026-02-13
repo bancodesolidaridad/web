@@ -111,6 +111,45 @@
 })();
 
 /**
+ * Hide header on scroll down and show it on scroll up.
+ */
+(function () {
+  var header = document.querySelector("header");
+  if (!header) return;
+
+  var menu = document.getElementById("menu-principal");
+  var lastY = window.scrollY;
+  var minScrollToHide = 100;
+  var minDelta = 6;
+
+  function updateHeaderVisibility() {
+    var currentY = window.scrollY;
+    var delta = currentY - lastY;
+    var isMenuOpen = menu && menu.classList.contains("is-open");
+
+    if (currentY <= 0 || isMenuOpen) {
+      header.classList.remove("is-hidden");
+      lastY = currentY;
+      return;
+    }
+
+    if (Math.abs(delta) < minDelta) return;
+
+    if (delta > 0 && currentY > minScrollToHide) {
+      header.classList.add("is-hidden");
+    } else if (delta < 0) {
+      header.classList.remove("is-hidden");
+    }
+
+    lastY = currentY;
+  }
+
+  window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
+  window.addEventListener("resize", updateHeaderVisibility);
+  updateHeaderVisibility();
+})();
+
+/**
  * Shows the scroll-top button when the footer is shown.
  */
 (function () {
