@@ -27,6 +27,28 @@
 })();
 
 /**
+ * Sync header height into a CSS variable for mobile overlays.
+ */
+(function () {
+  var header = document.querySelector("header");
+  if (!header) return;
+
+  function updateHeaderOffset() {
+    document.documentElement.style.setProperty("--header-offset", header.offsetHeight + "px");
+  }
+
+  window.addEventListener("resize", updateHeaderOffset);
+  window.addEventListener("load", updateHeaderOffset);
+
+  if (typeof ResizeObserver === "function") {
+    var resizeObserver = new ResizeObserver(updateHeaderOffset);
+    resizeObserver.observe(header);
+  }
+
+  updateHeaderOffset();
+})();
+
+/**
  * Render KPIs from app configuration.
  */
 (function () {
@@ -95,6 +117,9 @@
       isOpen ? "Abrir menú de navegación" : "Cerrar menú de navegación"
     );
     menu.classList.toggle("is-open", !isOpen);
+    if (!isOpen) {
+      document.querySelector("header").classList.remove("is-hidden");
+    }
   });
 
   menu.querySelectorAll("a").forEach(function (link) {
