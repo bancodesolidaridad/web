@@ -816,7 +816,7 @@
 
       section {
         min-height: auto;
-        padding: 2rem 0;
+        padding: 2rem 0 !important;
       }
       section .cards {
         order: 1;
@@ -873,6 +873,18 @@
       }
 
       .kpi>div {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      code.inline {
+        font-size: 1em;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .kpis {
         flex-direction: column;
       }
     }
