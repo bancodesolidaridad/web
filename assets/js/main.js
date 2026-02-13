@@ -55,6 +55,22 @@
   }).join("\n");
 
   kpisContainer.innerHTML = html;
+
+  var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var kpiNodes = kpisContainer.querySelectorAll(".kpi");
+
+  if (prefersReducedMotion) {
+    kpiNodes.forEach(function (kpiNode) {
+      kpiNode.classList.add("is-visible");
+    });
+    return;
+  }
+
+  kpiNodes.forEach(function (kpiNode, index) {
+    window.setTimeout(function () {
+      kpiNode.classList.add("is-visible");
+    }, index * 220);
+  });
 })();
 
 /**

@@ -354,21 +354,31 @@
     }
 
     .kpis {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
       gap: .75rem;
+      justify-content: center;
+      align-items: center;
     }
 
     .kpi {
+      flex: 1;
       padding: .85rem;
       border-radius: 16px;
       background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 241, 244, .85));
       box-shadow: 0 6px 18px rgba(17, 24, 39, .05);
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    .kpi.is-visible {
+      animation: kpi-fade-in .45s ease forwards;
     }
 
     .kpi>div {
       display: flex;
       gap: .5rem;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
 
     .kpi img {
@@ -388,6 +398,19 @@
       color: rgba(31, 41, 55, .65);
       font-size: .88rem;
       margin-top: .25rem;
+      text-align: center;
+    }
+
+    @keyframes kpi-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Main */
