@@ -729,6 +729,15 @@
         justify-self: center;
       }
 
+      section .cards {
+        order: 1;
+      }
+
+      .cards {
+        margin: 0;
+        flex-direction: column;
+      }
+
       header .container {
         width: 100%;
       }
@@ -824,14 +833,6 @@
       section {
         min-height: auto;
         padding: 2rem 0 !important;
-      }
-      section .cards {
-        order: 1;
-      }
-
-      .cards {
-        margin: 0;
-        flex-direction: column;
       }
 
       .highlight {
