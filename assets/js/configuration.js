@@ -6,7 +6,7 @@ window.APP_CONFIG = {
   email: "bancodesolidaridad.esp@gmail.com",
   rrss: {
     instagram: "https://www.instagram.com/bancodesolidaridad",
-    facebook: "https://www.facebook.com/bancodesolidaridad"
+    facebook: "https://www.facebook.com/profile.php?id=1000693796947"
   },
   kpis: [
     {
