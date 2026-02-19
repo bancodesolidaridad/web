@@ -64,7 +64,7 @@ Por ejemplo, vamos a editar un texto del `index.html`:
 6. Los cambios se autopublican, tardan poco (~1min).
 
 
-# Revertir cambios
+# Revertir cambios ante desastre (la web no funciona)
 ¿Y si la lio? No pasa nada, ¡hay histórico de cambios!
 
 1. Acceder al **Histórico de cambios** (`Commits`):
