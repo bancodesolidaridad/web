@@ -350,17 +350,7 @@
 
         return [
           '<article class="news-post">',
-          '  <header class="news-post__header">',
-          '    <span class="news-post__avatar" aria-hidden="true"></span>',
-          "    <div>",
-          "      <strong>Banco de Solidaridad</strong>",
-          '      <time datetime="' + escapeHtml(datetime) + '">' + readableDate + "</time>",
-          "    </div>",
-          "  </header>",
           "  " + imageBlock,
-          '  <div class="news-post__actions" aria-hidden="true">',
-          "    <span>❤</span><span>💬</span><span>↗</span>",
-          "  </div>",
           '  <div class="news-post__body">',
           permalink
             ? '    <h3><a href="' + escapeHtml(permalink) + '" target="_blank" rel="noopener noreferrer">' + title + "</a></h3>"
@@ -395,6 +385,39 @@
       render(posts);
     })
     .catch(function () {
-      render();
+      // MOCK
+      var posts = [
+        {
+          "id": "mock-1",
+          "title": "Recogida mensual de alimentos",
+          "description": "Gracias a todos los voluntarios por hacerlo posible una vez mas. Cada caja cuenta.",
+          "caption": "Recogida mensual de alimentos\nGracias a todos los voluntarios por hacerlo posible una vez mas. Cada caja cuenta.",
+          "mediaType": "IMAGE",
+          "imageUrl": "assets/img/alimentos.png",
+          "permalink": "https://www.instagram.com/p/mockpost1/",
+          "timestamp": "2026-02-15T10:30:00+0000"
+        },
+        {
+          "id": "mock-2",
+          "title": "Nuevas familias acompanadas",
+          "description": "Seguimos creciendo en acompanamiento cercano y apoyo directo a quienes mas lo necesitan.",
+          "caption": "Nuevas familias acompanadas\nSeguimos creciendo en acompanamiento cercano y apoyo directo a quienes mas lo necesitan.",
+          "mediaType": "IMAGE",
+          "imageUrl": "assets/img/family.png",
+          "permalink": "https://www.instagram.com/p/mockpost2/",
+          "timestamp": "2026-02-08T17:15:00+0000"
+        },
+        {
+          "id": "mock-3",
+          "title": "Equipo de voluntariado en accion",
+          "description": "Una tarde de preparacion y reparto con mucha ilusion. Gracias por sumar tiempo y corazon.",
+          "caption": "Equipo de voluntariado en accion\nUna tarde de preparacion y reparto con mucha ilusion. Gracias por sumar tiempo y corazon.",
+          "mediaType": "IMAGE",
+          "imageUrl": "assets/img/voluntarios.png",
+          "permalink": "https://www.instagram.com/p/mockpost3/",
+          "timestamp": "2026-01-30T13:00:00+0000"
+        }
+      ];
+      render(posts);
     });
 })();
