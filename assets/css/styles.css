@@ -621,8 +621,8 @@
     }
 
     .news .news-post {
-      flex: 1;
-      max-width: 300px;
+      flex: 1 1 280px;
+      max-width: 320px;
       overflow: hidden;
       border: 1px solid rgba(17, 24, 39, .10);
       border-radius: 18px;
@@ -933,8 +933,9 @@
         width: 100%;
       }
       .news .news-post {
+        flex: 1 1 0;
         width: 100%;
-        max-width: 100%;
+        max-width: 320px;
       }
     }
 
@@ -1013,6 +1014,12 @@
 
       .kpi>div {
         flex-direction: column;
+      }
+
+      .news .news-post {
+        flex: auto;
+        width: 100%;
+        min-width: 100%;
       }
     }
 
