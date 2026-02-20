@@ -322,28 +322,51 @@
   function render(posts) {
     var html = '';
     if (!Array.isArray(posts) || !posts.length) {
-      html = "<article>No hay noticias</article>";
+      html = [
+        '<article class="news-post news-post--empty">',
+        '  <div class="news-post__media news-post__media--placeholder" role="img" aria-label="Próximamente"></div>',
+        '  <div class="news-post__body">',
+        "    <h3>No hay noticias</h3>",
+        "    <p>Cuando haya posts en Instagram, aparecerán aquí automáticamente.</p>",
+        "  </div>",
+        "</article>"
+      ].join("\n");
       var noticias = document.getElementById('noticias');
       if (noticias) {
         noticias.classList.add('section--sm');
       }
     } else {
       html = posts.slice(0, 3).map(function (post) {
+        var imageUrl = typeof post.imageUrl === "string" ? post.imageUrl : "";
         var permalink = typeof post.permalink === "string" ? post.permalink : "";
         var title = escapeHtml(buildTitle(post));
         var description = escapeHtml(buildDescription(post));
         var datetime = typeof post.timestamp === "string" ? post.timestamp : "";
         var readableDate = escapeHtml(formatDate(datetime) || "Fecha no disponible");
 
-        var heading = permalink
-          ? '<h3><a href="' + escapeHtml(permalink) + '" target="_blank" rel="noopener noreferrer">' + title + "</a></h3>"
-          : "<h3>" + title + "</h3>";
+        var imageBlock = imageUrl
+          ? '<a class="news-post__media-link" href="' + escapeHtml(permalink || "#") + '" target="_blank" rel="noopener noreferrer"><img class="news-post__media" src="' + escapeHtml(imageUrl) + '" alt="' + title + '" loading="lazy" /></a>'
+          : '<div class="news-post__media news-post__media--placeholder" role="img" aria-label="Publicación en Instagram"></div>';
 
         return [
-          "<article>",
-          '  <time datetime="' + escapeHtml(datetime) + '">' + readableDate + "</time>",
-          "  " + heading,
-          "  <p>" + description + "</p>",
+          '<article class="news-post">',
+          '  <header class="news-post__header">',
+          '    <span class="news-post__avatar" aria-hidden="true"></span>',
+          "    <div>",
+          "      <strong>Banco de Solidaridad</strong>",
+          '      <time datetime="' + escapeHtml(datetime) + '">' + readableDate + "</time>",
+          "    </div>",
+          "  </header>",
+          "  " + imageBlock,
+          '  <div class="news-post__actions" aria-hidden="true">',
+          "    <span>❤</span><span>💬</span><span>↗</span>",
+          "  </div>",
+          '  <div class="news-post__body">',
+          permalink
+            ? '    <h3><a href="' + escapeHtml(permalink) + '" target="_blank" rel="noopener noreferrer">' + title + "</a></h3>"
+            : "    <h3>" + title + "</h3>",
+          "    <p>" + description + "</p>",
+          "  </div>",
           "</article>"
         ].join("\n");
       }).join("\n");
@@ -354,7 +377,8 @@
 
   fetch("./assets/data/instagram-posts.json", { cache: "no-store" })
     .then(function (response) {
-      render();
+      if (!response.ok) throw new Error("No se pudo cargar el feed de Instagram.");
+      return response.json();
     })
     .then(function (payload) {
       var posts = payload && Array.isArray(payload.posts) ? payload.posts : [];
