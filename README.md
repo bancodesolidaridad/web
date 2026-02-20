@@ -41,6 +41,19 @@ Imágenes utilizadas.
 ### js
 Código que gestiona las partes dinámicas y animaciones de la web.
 
+## Instagram en Noticias (GitHub Actions)
+La sección `Noticias` muestra los 3 últimos posts de Instagram desde `assets/data/instagram-posts.json`.
+
+Ese JSON se actualiza automáticamente con el workflow:
+`/.github/workflows/update-instagram-news.yml`
+
+### Configuración necesaria en GitHub
+`Settings > Secrets and variables > Actions`, contiene estos secretos del repositorio:
+1. `INSTAGRAM_ACCESS_TOKEN`
+2. `INSTAGRAM_USER_ID`
+
+El workflow ejecuta `scripts/get-instagram-posts.mjs`, genera el JSON y actualiza automáticamente si hay cambios.
+
 ### meta.jpg
 Imagen *metatag* mostrada al compartir el enlace.
 

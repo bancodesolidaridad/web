@@ -277,3 +277,90 @@
     window.requestAnimationFrame(step);
   });
 })();
+
+/**
+ * Render latest Instagram posts in the news section.
+ */
+(function () {
+  var newsContainer = document.getElementById("news-list");
+  if (!newsContainer) return;
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function formatDate(isoDate) {
+    if (!isoDate) return "";
+    var date = new Date(isoDate);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
+
+  function buildTitle(post) {
+    if (typeof post.title === "string" && post.title.trim()) return post.title.trim();
+    if (typeof post.caption === "string" && post.caption.trim()) {
+      return post.caption.trim().split(/\r?\n/)[0].slice(0, 80);
+    }
+    return "Noticia";
+  }
+
+  function buildDescription(post) {
+    if (typeof post.description === "string" && post.description.trim()) return post.description.trim();
+    if (typeof post.caption === "string" && post.caption.trim()) return post.caption.trim().slice(0, 220);
+    return "Ver noticia en Instagram.";
+  }
+
+  function render(posts) {
+    var html = '';
+    if (!Array.isArray(posts) || !posts.length) {
+      html = "<article>No hay noticias</article>";
+      var noticias = document.getElementById('noticias');
+      if (noticias) {
+        noticias.classList.add('section--sm');
+      }
+    } else {
+      html = posts.slice(0, 3).map(function (post) {
+        var permalink = typeof post.permalink === "string" ? post.permalink : "";
+        var title = escapeHtml(buildTitle(post));
+        var description = escapeHtml(buildDescription(post));
+        var datetime = typeof post.timestamp === "string" ? post.timestamp : "";
+        var readableDate = escapeHtml(formatDate(datetime) || "Fecha no disponible");
+
+        var heading = permalink
+          ? '<h3><a href="' + escapeHtml(permalink) + '" target="_blank" rel="noopener noreferrer">' + title + "</a></h3>"
+          : "<h3>" + title + "</h3>";
+
+        return [
+          "<article>",
+          '  <time datetime="' + escapeHtml(datetime) + '">' + readableDate + "</time>",
+          "  " + heading,
+          "  <p>" + description + "</p>",
+          "</article>"
+        ].join("\n");
+      }).join("\n");
+    }
+
+    newsContainer.innerHTML = html;
+  }
+
+  fetch("./assets/data/instagram-posts.json", { cache: "no-store" })
+    .then(function (response) {
+      render();
+    })
+    .then(function (payload) {
+      var posts = payload && Array.isArray(payload.posts) ? payload.posts : [];
+      render(posts);
+    })
+    .catch(function () {
+      render();
+    });
+})();
