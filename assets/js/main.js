@@ -375,10 +375,20 @@
     newsContainer.innerHTML = html;
   }
 
+  function renderLoading() {
+    newsContainer.innerHTML = [
+      '<div class="spinner" aria-live="polite" aria-busy="true">',
+      '  <span class="spinner__loading" aria-hidden="true"></span>',
+      "  <p>Cargando noticias...</p>",
+      "</div>"
+    ].join("\n");
+  }
+
+  renderLoading();
+
   fetch("./assets/data/instagram-posts.json", { cache: "no-store" })
     .then(function (response) {
-      if (!response.ok) throw new Error("No se pudo cargar el feed de Instagram.");
-      return response.json();
+      render();
     })
     .then(function (payload) {
       var posts = payload && Array.isArray(payload.posts) ? payload.posts : [];
