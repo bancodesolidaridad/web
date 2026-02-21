@@ -296,6 +296,7 @@ function spinnerLoading(container) {
 (function () {
   var newsContainer = document.getElementById("news-list");
   if (!newsContainer) return;
+  var SLIDE_POSTS = 3;
   var currentIndex = 0;
   var allPosts = [];
   var touchStartX = 0;
@@ -390,6 +391,7 @@ function spinnerLoading(container) {
 
     newsContainer.innerHTML = html;
     updateTrackPosition();
+    updateTrackFillState();
     updateArrowState();
   }
 
@@ -412,6 +414,13 @@ function spinnerLoading(container) {
     return card.getBoundingClientRect().width + gap;
   }
 
+  function getTrackGap() {
+    var track = trackNode();
+    if (!track) return 0;
+    var styles = window.getComputedStyle(track);
+    return Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+  }
+
   function maxIndex() {
     var viewport = viewportNode();
     var step = getTrackStep();
@@ -421,21 +430,9 @@ function spinnerLoading(container) {
     var paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0") || 0;
     var paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0") || 0;
     var viewportInnerWidth = Math.max(0, viewport.clientWidth - paddingLeft - paddingRight);
-    var visibleCards = Math.max(1, Math.floor((viewportInnerWidth + 0.5) / step));
-    var fullGroups = Math.floor(allPosts.length / visibleCards);
-    return Math.max(0, (fullGroups - 1) * visibleCards);
-  }
-
-  function slideStepCards() {
-    var viewport = viewportNode();
-    var step = getTrackStep();
-    if (!viewport || !step) return PAGE_SIZE;
-
-    var viewportStyles = window.getComputedStyle(viewport);
-    var paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0") || 0;
-    var paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0") || 0;
-    var viewportInnerWidth = Math.max(0, viewport.clientWidth - paddingLeft - paddingRight);
-    return Math.max(1, Math.floor((viewportInnerWidth + 0.5) / step));
+    var gap = getTrackGap();
+    var visibleCards = Math.max(1, Math.floor((viewportInnerWidth + gap) / step));
+    return Math.max(0, allPosts.length - visibleCards);
   }
 
   function updateTrackPosition() {
@@ -445,6 +442,15 @@ function spinnerLoading(container) {
     if (!step) return;
     if (currentIndex > maxIndex()) currentIndex = maxIndex();
     track.style.transform = "translateX(-" + (currentIndex * step) + "px)";
+  }
+
+  function updateTrackFillState() {
+    var track = trackNode();
+    if (!track) return;
+    track.classList.toggle(
+      "news-carousel__track--centered",
+      allPosts.length < SLIDE_POSTS
+    );
   }
 
   function updateArrowState() {
@@ -463,15 +469,17 @@ function spinnerLoading(container) {
 
   function goToNextSlide() {
     if (currentIndex >= maxIndex()) return;
-    currentIndex = Math.min(maxIndex(), currentIndex + slideStepCards());
+    currentIndex = Math.min(maxIndex(), currentIndex + 1);
     updateTrackPosition();
+    updateTrackFillState();
     updateArrowState();
   }
 
   function goToPreviousSlide() {
     if (currentIndex <= 0) return;
-    currentIndex = Math.max(0, currentIndex - slideStepCards());
+    currentIndex = Math.max(0, currentIndex - 1);
     updateTrackPosition();
+    updateTrackFillState();
     updateArrowState();
   }
 
@@ -510,6 +518,7 @@ function spinnerLoading(container) {
     if (!allPosts.length) return;
     if (currentIndex > maxIndex()) currentIndex = maxIndex();
     updateTrackPosition();
+    updateTrackFillState();
     updateArrowState();
   });
 
