@@ -27,6 +27,18 @@
 })();
 
 /**
+ * Shows a spinner loading.
+ */
+function spinnerLoading(container) {
+  container.innerHTML = [
+    '<div class="spinner" aria-live="polite" aria-busy="true">',
+    '  <span class="spinner__loading" aria-hidden="true"></span>',
+    "  <p>Cargando noticias...</p>",
+    "</div>"
+  ].join("\n");
+}
+
+/**
  * Sync header height into a CSS variable for mobile overlays.
  */
 (function () {
@@ -284,6 +296,21 @@
 (function () {
   var newsContainer = document.getElementById("news-list");
   if (!newsContainer) return;
+  var currentIndex = 0;
+  var allPosts = [];
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var SWIPE_THRESHOLD = 40;
+  var config = window.APP_CONFIG || {};
+
+  var configuredNews = Array.isArray(config.news)
+    ? config.news
+    : (Array.isArray(config.noticias) ? config.noticias : []);
+
+  function mergeConfiguredNews(postsFromJson) {
+    var jsonPosts = Array.isArray(postsFromJson) ? postsFromJson : [];
+    return configuredNews.concat(jsonPosts);
+  }
 
   function escapeHtml(value) {
     return String(value)
@@ -292,17 +319,6 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
-  }
-
-  function formatDate(isoDate) {
-    if (!isoDate) return "";
-    var date = new Date(isoDate);
-    if (Number.isNaN(date.getTime())) return "";
-    return date.toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    });
   }
 
   function buildTitle(post) {
@@ -319,7 +335,30 @@
     return "Ver noticia en Instagram.";
   }
 
-  function render(posts) {
+  function renderPostCard(post) {
+    var imageUrl = typeof post.imageUrl === "string" ? post.imageUrl : "";
+    var permalink = typeof post.permalink === "string" ? post.permalink : "";
+    var title = escapeHtml(buildTitle(post));
+    var description = escapeHtml(buildDescription(post));
+
+    var imageBlock = imageUrl
+      ? '<a class="news-post__media-link" href="' + escapeHtml(permalink || "#") + '" target="_blank" rel="noopener noreferrer"><img class="news-post__media" src="' + escapeHtml(imageUrl) + '" alt="' + title + '" loading="lazy" /></a>'
+      : '<div class="news-post__media news-post__media--placeholder" role="img" aria-label="Publicación en Instagram"></div>';
+
+    return [
+      '<article class="news-post">',
+      "  " + imageBlock,
+      '  <div class="news-post__body">',
+      permalink
+        ? '    <h3><a href="' + escapeHtml(permalink) + '" target="_blank" rel="noopener noreferrer">' + title + "</a></h3>"
+        : "    <h3>" + title + "</h3>",
+      "    <p>" + description + "</p>",
+      "  </div>",
+      "</article>"
+    ].join("\n");
+  }
+
+  function renderCarousel(posts) {
     var html = '';
     if (!Array.isArray(posts) || !posts.length) {
       html = [
@@ -336,88 +375,156 @@
         noticias.classList.add('section--sm');
       }
     } else {
-      html = posts.slice(0, 3).map(function (post) {
-        var imageUrl = typeof post.imageUrl === "string" ? post.imageUrl : "";
-        var permalink = typeof post.permalink === "string" ? post.permalink : "";
-        var title = escapeHtml(buildTitle(post));
-        var description = escapeHtml(buildDescription(post));
-        var datetime = typeof post.timestamp === "string" ? post.timestamp : "";
-        var readableDate = escapeHtml(formatDate(datetime) || "Fecha no disponible");
-
-        var imageBlock = imageUrl
-          ? '<a class="news-post__media-link" href="' + escapeHtml(permalink || "#") + '" target="_blank" rel="noopener noreferrer"><img class="news-post__media" src="' + escapeHtml(imageUrl) + '" alt="' + title + '" loading="lazy" /></a>'
-          : '<div class="news-post__media news-post__media--placeholder" role="img" aria-label="Publicación en Instagram"></div>';
-
-        return [
-          '<article class="news-post">',
-          "  " + imageBlock,
-          '  <div class="news-post__body">',
-          permalink
-            ? '    <h3><a href="' + escapeHtml(permalink) + '" target="_blank" rel="noopener noreferrer">' + title + "</a></h3>"
-            : "    <h3>" + title + "</h3>",
-          "    <p>" + description + "</p>",
-          "  </div>",
-          "</article>"
-        ].join("\n");
-      }).join("\n");
+      html = [
+        '<div class="news-carousel">',
+        '  <button class="news-carousel__arrow news-carousel__arrow--prev" type="button" data-carousel-action="prev"' + (currentIndex === 0 ? " disabled" : "") + ' aria-label="Slide anterior">‹</button>',
+        '  <div class="news-carousel__viewport">',
+        '    <div class="news-carousel__track">',
+        posts.map(renderPostCard).join("\n"),
+        "    </div>",
+        "  </div>",
+        '  <button class="news-carousel__arrow news-carousel__arrow--next" type="button" data-carousel-action="next"' + (currentIndex >= maxIndex() ? " disabled" : "") + ' aria-label="Slide siguiente">›</button>',
+        "</div>"
+      ].join("\n");
     }
 
     newsContainer.innerHTML = html;
+    updateTrackPosition();
+    updateArrowState();
   }
 
-  function renderLoading() {
-    newsContainer.innerHTML = [
-      '<div class="spinner" aria-live="polite" aria-busy="true">',
-      '  <span class="spinner__loading" aria-hidden="true"></span>',
-      "  <p>Cargando noticias...</p>",
-      "</div>"
-    ].join("\n");
+  function trackNode() {
+    return newsContainer.querySelector(".news-carousel__track");
   }
 
-  renderLoading();
+  function viewportNode() {
+    return newsContainer.querySelector(".news-carousel__viewport");
+  }
+
+  function getTrackStep() {
+    var track = trackNode();
+    if (!track) return 0;
+    var card = track.querySelector(".news-post:not(.news-post--empty)");
+    if (!card) return 0;
+
+    var styles = window.getComputedStyle(track);
+    var gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+    return card.getBoundingClientRect().width + gap;
+  }
+
+  function maxIndex() {
+    var viewport = viewportNode();
+    var step = getTrackStep();
+    if (!viewport || !step) return 0;
+
+    var viewportStyles = window.getComputedStyle(viewport);
+    var paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0") || 0;
+    var paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0") || 0;
+    var viewportInnerWidth = Math.max(0, viewport.clientWidth - paddingLeft - paddingRight);
+    var visibleCards = Math.max(1, Math.floor((viewportInnerWidth + 0.5) / step));
+    var fullGroups = Math.floor(allPosts.length / visibleCards);
+    return Math.max(0, (fullGroups - 1) * visibleCards);
+  }
+
+  function slideStepCards() {
+    var viewport = viewportNode();
+    var step = getTrackStep();
+    if (!viewport || !step) return PAGE_SIZE;
+
+    var viewportStyles = window.getComputedStyle(viewport);
+    var paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0") || 0;
+    var paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0") || 0;
+    var viewportInnerWidth = Math.max(0, viewport.clientWidth - paddingLeft - paddingRight);
+    return Math.max(1, Math.floor((viewportInnerWidth + 0.5) / step));
+  }
+
+  function updateTrackPosition() {
+    var track = trackNode();
+    if (!track) return;
+    var step = getTrackStep();
+    if (!step) return;
+    if (currentIndex > maxIndex()) currentIndex = maxIndex();
+    track.style.transform = "translateX(-" + (currentIndex * step) + "px)";
+  }
+
+  function updateArrowState() {
+    var prev = newsContainer.querySelector('.news-carousel__arrow--prev');
+    var next = newsContainer.querySelector('.news-carousel__arrow--next');
+    if (!prev || !next) return;
+    prev.disabled = currentIndex <= 0;
+    next.disabled = currentIndex >= maxIndex();
+  }
+
+  function setPosts(posts) {
+    allPosts = Array.isArray(posts) ? posts : [];
+    currentIndex = 0;
+    renderCarousel(allPosts);
+  }
+
+  function goToNextSlide() {
+    if (currentIndex >= maxIndex()) return;
+    currentIndex = Math.min(maxIndex(), currentIndex + slideStepCards());
+    updateTrackPosition();
+    updateArrowState();
+  }
+
+  function goToPreviousSlide() {
+    if (currentIndex <= 0) return;
+    currentIndex = Math.max(0, currentIndex - slideStepCards());
+    updateTrackPosition();
+    updateArrowState();
+  }
+
+  newsContainer.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target || !target.matches("[data-carousel-action]")) return;
+
+    var action = target.getAttribute("data-carousel-action");
+    if (action === "prev") goToPreviousSlide();
+    if (action === "next") goToNextSlide();
+  });
+
+  newsContainer.addEventListener("touchstart", function (event) {
+    if (!event.touches || event.touches.length !== 1) return;
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+  }, { passive: true });
+
+  newsContainer.addEventListener("touchend", function (event) {
+    if (!event.changedTouches || event.changedTouches.length !== 1) return;
+
+    var touchEndX = event.changedTouches[0].clientX;
+    var touchEndY = event.changedTouches[0].clientY;
+    var deltaX = touchEndX - touchStartX;
+    var deltaY = touchEndY - touchStartY;
+
+    // Ignore mostly vertical swipes so page scroll keeps working.
+    if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+
+    if (deltaX < 0) goToNextSlide();
+    if (deltaX > 0) goToPreviousSlide();
+  });
+
+  window.addEventListener("resize", function () {
+    if (!allPosts.length) return;
+    if (currentIndex > maxIndex()) currentIndex = maxIndex();
+    updateTrackPosition();
+    updateArrowState();
+  });
+
+  spinnerLoading(newsContainer);
 
   fetch("./assets/data/instagram-posts.json", { cache: "no-store" })
     .then(function (response) {
-      render();
+      if (!response.ok) throw new Error("No se pudo cargar el feed de Instagram.");
+      return response.json();
     })
     .then(function (payload) {
       var posts = payload && Array.isArray(payload.posts) ? payload.posts : [];
-      render(posts);
+      setPosts(mergeConfiguredNews(posts));
     })
     .catch(function () {
-      // MOCK
-      var posts = [
-        {
-          "id": "mock-1",
-          "title": "Recogida mensual de alimentos",
-          "description": "Gracias a todos los voluntarios por hacerlo posible una vez mas. Cada caja cuenta.",
-          "caption": "Recogida mensual de alimentos\nGracias a todos los voluntarios por hacerlo posible una vez mas. Cada caja cuenta.",
-          "mediaType": "IMAGE",
-          "imageUrl": "assets/img/alimentos.png",
-          "permalink": "https://www.instagram.com/p/mockpost1/",
-          "timestamp": "2026-02-15T10:30:00+0000"
-        },
-        {
-          "id": "mock-2",
-          "title": "Nuevas familias acompanadas",
-          "description": "Seguimos creciendo en acompanamiento cercano y apoyo directo a quienes mas lo necesitan.",
-          "caption": "Nuevas familias acompanadas\nSeguimos creciendo en acompanamiento cercano y apoyo directo a quienes mas lo necesitan.",
-          "mediaType": "IMAGE",
-          "imageUrl": "assets/img/family.png",
-          "permalink": "https://www.instagram.com/p/mockpost2/",
-          "timestamp": "2026-02-08T17:15:00+0000"
-        },
-        {
-          "id": "mock-3",
-          "title": "Equipo de voluntariado en accion",
-          "description": "Una tarde de preparacion y reparto con mucha ilusion. Gracias por sumar tiempo y corazon.",
-          "caption": "Equipo de voluntariado en accion\nUna tarde de preparacion y reparto con mucha ilusion. Gracias por sumar tiempo y corazon.",
-          "mediaType": "IMAGE",
-          "imageUrl": "assets/img/voluntarios.png",
-          "permalink": "https://www.instagram.com/p/mockpost3/",
-          "timestamp": "2026-01-30T13:00:00+0000"
-        }
-      ];
-      render(posts);
+      setPosts(mergeConfiguredNews([]));
     });
 })();

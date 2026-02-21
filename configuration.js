@@ -8,6 +8,18 @@ window.APP_CONFIG = {
     instagram: "https://www.instagram.com/bancodesolidaridad",
     facebook: "https://www.facebook.com/profile.php?id=1000693796947"
   },
+  news: [
+    {
+      "id": "mock-1",
+      "title": "Recogida mensual de alimentos",
+      "description": "Gracias a todos los voluntarios por hacerlo posible una vez mas. Cada caja cuenta.",
+      "caption": "Recogida mensual de alimentos\nGracias a todos los voluntarios por hacerlo posible una vez mas. Cada caja cuenta.",
+      "mediaType": "IMAGE",
+      "imageUrl": "assets/img/alimentos.png",
+      "permalink": "https://www.instagram.com/p/mockpost1/",
+      "timestamp": "2026-02-15T10:30:00+0000"
+    }
+  ],
   kpis: [
     {
       icon: "assets/img/family.png",
