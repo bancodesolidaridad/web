@@ -378,87 +378,66 @@ function spinnerLoading(container) {
     } else {
       html = [
         '<div class="news-carousel">',
-        '  <button class="news-carousel__arrow news-carousel__arrow--prev" type="button" data-carousel-action="prev"' + (currentIndex === 0 ? " disabled" : "") + ' aria-label="Slide anterior">‹</button>',
+        '  <button class="news-carousel__arrow news-carousel__arrow--prev" type="button" data-carousel-action="prev" aria-label="Slide anterior">‹</button>',
         '  <div class="news-carousel__viewport">',
         '    <div class="news-carousel__track">',
         posts.map(renderPostCard).join("\n"),
         "    </div>",
         "  </div>",
-        '  <button class="news-carousel__arrow news-carousel__arrow--next" type="button" data-carousel-action="next"' + (currentIndex >= maxIndex() ? " disabled" : "") + ' aria-label="Slide siguiente">›</button>',
+        '  <button class="news-carousel__arrow news-carousel__arrow--next" type="button" data-carousel-action="next" aria-label="Slide siguiente">›</button>',
         "</div>"
       ].join("\n");
     }
 
     newsContainer.innerHTML = html;
-    updateTrackPosition();
-    updateTrackFillState();
-    updateArrowState();
+    syncCarousel();
   }
 
-  function trackNode() {
-    return newsContainer.querySelector(".news-carousel__track");
-  }
+  function getMetrics() {
+    var track = newsContainer.querySelector(".news-carousel__track");
+    var viewport = newsContainer.querySelector(".news-carousel__viewport");
+    if (!track || !viewport) return null;
 
-  function viewportNode() {
-    return newsContainer.querySelector(".news-carousel__viewport");
-  }
-
-  function getTrackStep() {
-    var track = trackNode();
-    if (!track) return 0;
     var card = track.querySelector(".news-post:not(.news-post--empty)");
-    if (!card) return 0;
+    if (!card) return null;
 
-    var styles = window.getComputedStyle(track);
-    var gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
-    return card.getBoundingClientRect().width + gap;
-  }
+    var trackStyles = window.getComputedStyle(track);
+    var gap = Number.parseFloat(trackStyles.columnGap || trackStyles.gap || "0") || 0;
+    var step = card.getBoundingClientRect().width + gap;
 
-  function getTrackGap() {
-    var track = trackNode();
-    if (!track) return 0;
-    var styles = window.getComputedStyle(track);
-    return Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
-  }
-
-  function maxIndex() {
-    var viewport = viewportNode();
-    var step = getTrackStep();
-    if (!viewport || !step) return 0;
+    if (!step) return null;
 
     var viewportStyles = window.getComputedStyle(viewport);
     var paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0") || 0;
     var paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0") || 0;
     var viewportInnerWidth = Math.max(0, viewport.clientWidth - paddingLeft - paddingRight);
-    var gap = getTrackGap();
     var visibleCards = Math.max(1, Math.floor((viewportInnerWidth + gap) / step));
-    return Math.max(0, allPosts.length - visibleCards);
+    var maxIndex = Math.max(0, allPosts.length - visibleCards);
+
+    return {
+      track: track,
+      maxIndex: maxIndex,
+      step: step
+    };
   }
 
-  function updateTrackPosition() {
-    var track = trackNode();
-    if (!track) return;
-    var step = getTrackStep();
-    if (!step) return;
-    if (currentIndex > maxIndex()) currentIndex = maxIndex();
-    track.style.transform = "translateX(-" + (currentIndex * step) + "px)";
-  }
-
-  function updateTrackFillState() {
-    var track = trackNode();
-    if (!track) return;
-    track.classList.toggle(
-      "news-carousel__track--centered",
-      allPosts.length < SLIDE_POSTS
-    );
-  }
-
-  function updateArrowState() {
+  function syncCarousel() {
+    var metrics = getMetrics();
     var prev = newsContainer.querySelector('.news-carousel__arrow--prev');
     var next = newsContainer.querySelector('.news-carousel__arrow--next');
-    if (!prev || !next) return;
-    prev.disabled = currentIndex <= 0;
-    next.disabled = currentIndex >= maxIndex();
+
+    if (!metrics) {
+      if (prev) prev.disabled = true;
+      if (next) next.disabled = true;
+      return;
+    }
+
+    if (currentIndex > metrics.maxIndex) currentIndex = metrics.maxIndex;
+    metrics.track.style.transform = "translateX(-" + (currentIndex * metrics.step) + "px)";
+    metrics.track.classList.toggle("news-carousel__track--centered", allPosts.length < SLIDE_POSTS);
+
+    if (prev) prev.disabled = currentIndex <= 0;
+    if (next) next.disabled = currentIndex >= metrics.maxIndex;
   }
 
   function setPosts(posts) {
@@ -467,20 +446,14 @@ function spinnerLoading(container) {
     renderCarousel(allPosts);
   }
 
-  function goToNextSlide() {
-    if (currentIndex >= maxIndex()) return;
-    currentIndex = Math.min(maxIndex(), currentIndex + 1);
-    updateTrackPosition();
-    updateTrackFillState();
-    updateArrowState();
-  }
+  function moveCarousel(delta) {
+    var metrics = getMetrics();
+    if (!metrics) return;
 
-  function goToPreviousSlide() {
-    if (currentIndex <= 0) return;
-    currentIndex = Math.max(0, currentIndex - 1);
-    updateTrackPosition();
-    updateTrackFillState();
-    updateArrowState();
+    var nextIndex = Math.max(0, Math.min(metrics.maxIndex, currentIndex + delta));
+    if (nextIndex === currentIndex) return;
+    currentIndex = nextIndex;
+    syncCarousel();
   }
 
   newsContainer.addEventListener("click", function (event) {
@@ -488,8 +461,8 @@ function spinnerLoading(container) {
     if (!target || !target.matches("[data-carousel-action]")) return;
 
     var action = target.getAttribute("data-carousel-action");
-    if (action === "prev") goToPreviousSlide();
-    if (action === "next") goToNextSlide();
+    if (action === "prev") moveCarousel(-1);
+    if (action === "next") moveCarousel(1);
   });
 
   newsContainer.addEventListener("touchstart", function (event) {
@@ -510,16 +483,13 @@ function spinnerLoading(container) {
     if (Math.abs(deltaY) > Math.abs(deltaX)) return;
     if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
 
-    if (deltaX < 0) goToNextSlide();
-    if (deltaX > 0) goToPreviousSlide();
+    if (deltaX < 0) moveCarousel(1);
+    if (deltaX > 0) moveCarousel(-1);
   });
 
   window.addEventListener("resize", function () {
     if (!allPosts.length) return;
-    if (currentIndex > maxIndex()) currentIndex = maxIndex();
-    updateTrackPosition();
-    updateTrackFillState();
-    updateArrowState();
+    syncCarousel();
   });
 
   spinnerLoading(newsContainer);
