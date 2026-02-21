@@ -422,9 +422,10 @@ function spinnerLoading(container) {
   }
 
   function syncCarousel() {
-    var metrics = getMetrics();
     var prev = newsContainer.querySelector('.news-carousel__arrow--prev');
     var next = newsContainer.querySelector('.news-carousel__arrow--next');
+
+    var metrics = getMetrics();
 
     if (!metrics) {
       if (prev) prev.disabled = true;
@@ -444,6 +445,13 @@ function spinnerLoading(container) {
     allPosts = Array.isArray(posts) ? posts : [];
     currentIndex = 0;
     renderCarousel(allPosts);
+
+    if (allPosts.length <= SLIDE_POSTS) {
+      var prev = newsContainer.querySelector('.news-carousel__arrow--prev');
+      var next = newsContainer.querySelector('.news-carousel__arrow--next');
+      if (prev) prev.style.visibility = "hidden";
+      if (next) next.style.visibility = "hidden";
+    }
   }
 
   function moveCarousel(delta) {
