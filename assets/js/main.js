@@ -324,15 +324,11 @@ function spinnerLoading(container) {
 
   function buildTitle(post) {
     if (typeof post.title === "string" && post.title.trim()) return post.title.trim();
-    if (typeof post.caption === "string" && post.caption.trim()) {
-      return post.caption.trim().split(/\r?\n/)[0].slice(0, 80);
-    }
     return "Noticia";
   }
 
   function buildDescription(post) {
     if (typeof post.description === "string" && post.description.trim()) return post.description.trim();
-    if (typeof post.caption === "string" && post.caption.trim()) return post.caption.trim().slice(0, 220);
     return "Ver noticia en Instagram.";
   }
 
