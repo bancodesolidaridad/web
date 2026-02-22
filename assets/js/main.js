@@ -329,7 +329,7 @@ function spinnerLoading(container) {
 
   function buildDescription(post) {
     if (typeof post.description === "string" && post.description.trim()) return post.description.trim();
-    return "Ver noticia en Instagram.";
+    return "Ver noticia.";
   }
 
   function renderPostCard(post) {
@@ -340,7 +340,7 @@ function spinnerLoading(container) {
 
     var imageBlock = imageUrl
       ? '<a class="news-post__media-link" href="' + escapeHtml(permalink || "#") + '" target="_blank" rel="noopener noreferrer"><img class="news-post__media" src="' + escapeHtml(imageUrl) + '" alt="' + title + '" loading="lazy" /></a>'
-      : '<div class="news-post__media news-post__media--placeholder" role="img" aria-label="Publicación en Instagram"></div>';
+      : '<div class="news-post__media news-post__media--placeholder" role="img" aria-label="Publicación"></div>';
 
     return [
       '<article class="news-post">',
@@ -500,8 +500,7 @@ function spinnerLoading(container) {
 
   fetch("./assets/data/instagram-posts.json", { cache: "no-store" })
     .then(function (response) {
-      if (!response.ok) throw new Error("No se pudo cargar el feed de Instagram.");
-      return response.json();
+      setPosts();
     })
     .then(function (payload) {
       var posts = payload && Array.isArray(payload.posts) ? payload.posts : [];

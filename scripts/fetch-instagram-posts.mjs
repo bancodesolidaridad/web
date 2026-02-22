@@ -43,10 +43,8 @@ const normalizedPosts = posts
 
     return {
       id: typeof post.id === "string" ? post.id : "",
-      title: firstLine ? firstLine.slice(0, 90) : "Publicacion en Instagram",
-      description: caption ? caption.slice(0, 220) : "Ver publicacion en Instagram.",
-      caption,
-      mediaType: typeof post.media_type === "string" ? post.media_type : "",
+      title: firstLine ? firstLine.slice(0, 90) : "Noticia",
+      description: caption ? caption.slice(0, 220) : "Ver publicación.",
       imageUrl: typeof post.thumbnail_url === "string" && post.thumbnail_url
         ? post.thumbnail_url
         : (typeof post.media_url === "string" ? post.media_url : ""),
