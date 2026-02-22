@@ -711,7 +711,7 @@
     }
 
     .news .news-post--empty {
-      margin: 0 auto;
+      margin: 1rem auto;
     }
 
     .news-carousel__arrow {
@@ -1050,9 +1050,9 @@
       }
 
       .news .news-post {
-        flex: auto;
         width: 100%;
-        min-width: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
       }
     }
 
