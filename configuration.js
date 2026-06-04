@@ -31,14 +31,14 @@ window.APP_CONFIG = {
     {
       icon: "assets/img/voluntarios.png",
       iconAlt: "Icono voluntarios",
-      value: "+500",
+      value: "+200",
       label: "Voluntarios"
     },
     {
       icon: "assets/img/alimentos.png",
       iconAlt: "Icono alimentos",
-      value: "+50.000",
-      label: "KG repartidos"
+      value: "+1.000",
+      label: "kg repartidos al mes"
     }
   ]
 };
