@@ -2,7 +2,7 @@
  * Configuración de Banco de Solidaridad.
  */
 window.APP_CONFIG = {
-  CC: "CC2038 2269 23 6000441484",
+  CC: "ES57 2100 8029 6813 0060 8918",
   email: "bancodesolidaridad.esp@gmail.com",
   rrss: {
     instagram: "https://www.instagram.com/bancodesolidaridad",
