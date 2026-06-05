@@ -39,12 +39,6 @@ window.APP_CONFIG = {
       iconAlt: "Icono alimentos",
       value: "+1.000",
       label: "kg repartidos al mes"
-    },
-    {
-      icon: "assets/img/alimentos.png",
-      iconAlt: "Icono alimentos",
-      value: "+2.000",
-      label: "kg repartidos al mes"
     }
   ]
 };
